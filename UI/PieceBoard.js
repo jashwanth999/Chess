@@ -18,9 +18,9 @@ const rowPiecesList = [0, 7];
 const panPiecesList = [1, 6];
 
 const Square = ({ white, row, col, index }) => {
-  const backgroundColor = white ? WHITE : BLACK;
+  //   const backgroundColor = white ? WHITE : BLACK;
   const color = white ? BLACK : WHITE;
-  const textStyle = { fontWeight: "500", color: color };
+  //   const textStyle = { fontWeight: "500", color: color };
 
   const pan = useRef(new Animated.ValueXY()).current;
 
@@ -41,38 +41,58 @@ const Square = ({ white, row, col, index }) => {
       },
     })
   ).current;
+
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor,
         padding: 0,
       }}
     >
-      <Text
-        style={[
-          textStyle,
-          { opacity: col === 0 ? 1 : 0, position: "absolute" },
-        ]}
-      >
-        {"" + (8 - row)}
-      </Text>
-
-      {row === 7 && (
-        <Text
-          style={[
-            textStyle,
-            {
-              alignSelf: "flex-end",
-              position: "absolute",
-              bottom: 0,
-              right: 2,
-            },
-          ]}
+      {rowPiecesList.map((val, i) => {
+        // if (row === 7 && col === 1) console.log(pan.x, pan.y);
+        return (
+          <Animated.View
+            key={i}
+            style={{
+              transform: [{ translateX: pan.x }, { translateY: pan.y }],
+            }}
+            {...panResponder.panHandlers}
+          >
+            {row === val && (
+              <Image
+                style={{
+                  height: 48,
+                  zIndex: 1,
+                  width: 48,
+                  objectFit: "contain",
+                }}
+                source={8 - val === 1 ? coordB[col] : coordW[col]}
+              />
+            )}
+          </Animated.View>
+        );
+      })}
+      {panPiecesList.map((val, i) => (
+        <Animated.View
+          key={i}
+          style={{
+            transform: [{ translateX: pan.x }, { translateY: pan.y }],
+          }}
+          {...panResponder.panHandlers}
         >
-          {String.fromCharCode(97 + col)}
-        </Text>
-      )}
+          {row === val && (
+            <Image
+              style={{
+                height: 48,
+                width: 48,
+                objectFit: "contain",
+              }}
+              source={8 - val === 2 ? pieces.bp : pieces.wp}
+            />
+          )}
+        </Animated.View>
+      ))}
     </View>
   );
 };
@@ -96,14 +116,14 @@ const Row = ({ white, row }) => {
   );
 };
 
-export default function Board() {
+export default function PieceBoard() {
   const { height, width } = useWindowDimensions();
+  console.log(height);
   return (
     <View
       style={{
         height: width,
         width,
-        position: "absolute",
       }}
     >
       {Array(8)

@@ -1,11 +1,19 @@
-import { StyleSheet, Text, View, LogBox } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  LogBox,
+  useWindowDimensions,
+} from "react-native";
 import Board from "./UI/Board";
+import PieceBoard from "./UI/PieceBoard";
 LogBox.ignoreAllLogs();
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Board />
+      <PieceBoard />
     </View>
   );
 }
